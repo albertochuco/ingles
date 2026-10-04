@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>¡Aprende Inglés! Animales y Verduras</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Comic Sans MS', 'Chalkboard SE', cursive, sans-serif; }
+
+  body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #a8e6cf 0%, #dcedc1 25%, #ffd3b6 50%, #ffaaa5 75%, #ff8b94 100%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 15px;
+    overflow-x: hidden;
+  }
+
+  h1 {
+    font-size: clamp(26px, 6vw, 48px);
+    color: #fff;
+    text-shadow: 3px 3px 0 #ff6b6b, 6px 6px 0 rgba(0,0,0,0.15);
+    text-align: center;
+    margin: 10px 0 5px;
+    animation: bounce 2s ease infinite;
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
+  }
+
+  .subtitle {
+    font-size: clamp(16px, 4vw, 24px);
+    color: #fff;
+    background: #ff6b6b;
+    padding: 8px 25px;
+    border-radius: 30px;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  }
+
+  /* ---------- DÍAS ---------- */
+  .days-bar {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 20px;
+  }
+
+  .day-btn {
+    border: none;
+    cursor: pointer;
+    font-size: clamp(14px, 3vw, 20px);
+    font-weight: bold;
+    padding: 10px 16px;
+    border-radius: 20px;
+    color: #fff;
+    box-shadow: 0 4px 0 rgba(0,0,0,0.2);
+    transition: transform 0.15s;
+  }
+  .day-btn:hover { transform: scale(1.1); }
+  .day-btn.active { outline: 4px solid #fff; transform: scale(1.1); }
+
+  /* ---------- TARJETAS ---------- */
+  .cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: flex-start;
+    gap: 18px;
+    width: 100%;
+    max-width: 1200px;
+    min-height: 320px;
+  }
+
+  .card {
+    background: #fff;
+    border-radius: 30px;
+    width: min(210px, 44vw);
+    padding: 16px 12px;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    cursor: pointer;
+    transition: transform 0.2s;
+    animation: pop 0.5s ease backwards;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .card:hover { transform: scale(1.06) rotate(-1deg); }
+  .card:active { transform: scale(0.95); }
+
+  @keyframes pop {
+    from { transform: scale(0); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+
+  .card .emoji {
+    font-size: clamp(60px, 13vw, 90px);
+    display: block;
+    line-height: 1.2;
+  }
+
+  .card .word-es {
+    font-size: clamp(22px, 4.5vw, 28px);
+    color: #e74c3c;
+    font-weight: bold;
+    margin-top: 6px;
+  }
+
+  .card .word-en {
+    font-size: clamp(20px, 4vw, 24px);
+    color: #2980b9;
+    font-weight: bold;
+  }
+
+  .card .sound-hint {
+    font-size: 14px;
+    color: #999;
+    margin-top: 5px;
+  }
+
+  .type-badge {
+    display: inline-block;
+    font-size: 13px;
+    color: #fff;
+    padding: 3px 12px;
+    border-radius: 12px;
+    margin-bottom: 4px;
+  }
+  .badge-animal { background: #ff9f43; }
+  .badge-veg { background: #2ecc71; }
+
+  /* ---------- BOTONES ---------- */
+  .nav {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 25px;
+  }
+
+  .nav button {
+    border: none;
+    background: #fff;
+    color: #ff6b6b;
+    font-size: clamp(15px, 3.5vw, 20px);
+    font-weight: bold;
+    padding: 12px 22px;
+    border-radius: 30px;
+    cursor: pointer;
+    box-shadow: 0 4px 0 rgba(0,0,0,0.2);
+    transition: transform 0.15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .nav button:hover { transform: scale(1.1); }
+
+  .btn-print {
+    background: #6c5ce7 !important;
+    color: #fff !important;
+  }
+
+  footer {
+    margin-top: 20px;
+    color: #fff;
+    font-size: 15px;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+    text-align: center;
+  }
+
+  /* ============================================================
+     RESPONSIVE: celulares, tablets y pantallas grandes
+     ============================================================ */
+
+  /* Celulares pequeños (hasta 480px): 2 tarjetas por fila */
+  @media (max-width: 480px) {
+    body { padding: 10px; }
+    .cards { gap: 12px; }
+    .card { width: calc(50% - 6px); border-radius: 22px; padding: 12px 8px; }
+    .card:nth-child(5) { width: calc(50% - 6px); }
+    .nav { gap: 10px; }
+    .nav button { padding: 12px 16px; }
+  }
+
+  /* Celulares muy pequeños (hasta 360px) */
+  @media (max-width: 360px) {
+    .cards { gap: 10px; }
+    .card { width: calc(50% - 5px); }
+    .day-btn { padding: 8px 12px; }
+  }
+
+  /* Tablets (481px - 1024px): 3 tarjetas por fila */
+  @media (min-width: 481px) and (max-width: 1024px) {
+    .cards { gap: 16px; }
+    .card { width: calc(33.33% - 12px); max-width: 240px; }
+  }
+
+  /* Tablets en horizontal / portátiles pequeños (769px - 1200px) */
+  @media (min-width: 769px) {
+    .card { width: min(200px, 18%); }
+  }
+
+  /* Pantallas grandes (más de 1200px): 5 tarjetas en una sola fila */
+  @media (min-width: 1201px) {
+    .card { width: 200px; }
+    .cards { flex-wrap: nowrap; }
+  }
+
+  /* Ajustes táctiles: sin hover en pantallas touch */
+  @media (hover: none) {
+    .card:hover, .day-btn:hover, .nav button:hover { transform: none; }
+    .card:active { transform: scale(0.95); }
+  }
+
+  /* Orientación horizontal en celulares */
+  @media (max-height: 500px) and (orientation: landscape) {
+    body { padding: 8px; }
+    h1 { font-size: 26px; margin: 4px 0; }
+    .subtitle { margin-bottom: 8px; padding: 5px 18px; }
+    .days-bar { margin-bottom: 10px; gap: 5px; }
+    .day-btn { padding: 6px 10px; font-size: 13px; }
+    .card .emoji { font-size: 50px; }
+    .card .word-es { font-size: 19px; }
+    .card .word-en { font-size: 17px; }
+    .nav { margin-top: 12px; }
+    footer { margin-top: 10px; font-size: 12px; }
+  }
+
+  /* ---------- SECCIÓN SOLO PARA IMPRIMIR ---------- */
+  #printSection { display: none; }
+
+  @media print {
+    body { background: #fff; padding: 0; }
+    .days-bar, .nav, footer, .sound-hint, #dayTitle { display: none !important; }
+    h1 { color: #ff6b6b; text-shadow: none; animation: none; font-size: 34px; }
+    .cards { display: none !important; }
+    #printSection { display: block !important; }
+    .print-day { page-break-after: always; }
+    .print-day:last-child { page-break-after: avoid; }
+    .print-day-title {
+      text-align: center;
+      font-size: 30px;
+      color: #fff;
+      background: #ff6b6b;
+      border-radius: 20px;
+      padding: 10px;
+      margin: 10px 0 20px;
+    }
+    .print-cards {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 15px;
+    }
+    .print-card {
+      border: 3px dashed #ff6b6b;
+      border-radius: 25px;
+      width: 31%;
+      padding: 15px 8px;
+      text-align: center;
+      page-break-inside: avoid;
+    }
+    .print-card .emoji { font-size: 60px; display: block; }
+    .print-card .word-es { font-size: 24px; color: #e74c3c; font-weight: bold; }
+    .print-card .word-en { font-size: 21px; color: #2980b9; font-weight: bold; }
+    .print-cover {
+      text-align: center;
+      page-break-after: always;
+      padding-top: 200px;
+    }
+    .print-cover h1 { font-size: 50px; }
+    .print-cover p { font-size: 24px; color: #555; margin-top: 15px; }
+  }
+</style>
+</head>
+<body>
+
+  <h1>🌟 ¡Aprende Inglés! 🌟</h1>
+  <div class="subtitle" id="dayTitle">🐶 Animales y Verduras 🥕</div>
+
+  <div class="days-bar" id="daysBar"></div>
+
+  <div class="cards" id="cards"></div>
+
+  <div class="nav">
+    <button onclick="changeDay(-1)">⬅️ Atrás</button>
+    <button class="btn-print" onclick="window.print()">🖨️ Imprimir PDF</button>
+    <button onclick="changeDay(1)">Adelante ➡️</button>
+  </div>
+
+  <footer>👆 Toca una tarjeta para escuchar la pronunciación en inglés 🔊</footer>
+
+  <!-- Sección que solo aparece al imprimir -->
+  <div id="printSection"></div>
+
+<script>
+const enDays = ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"];
+
+const days = [
+  { day: "Lunes",   emojiDay: "🌞", color: "#e74c3c", items: [
+    { type: "animal", es: "Perro",     en: "Dog",      emoji: "🐶" },
+    { type: "animal", es: "Gato",      en: "Cat",      emoji: "🐱" },
+    { type: "animal", es: "Vaca",      en: "Cow",      emoji: "🐮" },
+    { type: "veg",    es: "Lechuga",   en: "Lettuce",  emoji: "🥬" },
+    { type: "veg",    es: "Zanahoria", en: "Carrot",   emoji: "🥕" }
+  ]},
+  { day: "Martes",  emojiDay: "🌈", color: "#e67e22", items: [
+    { type: "animal", es: "Cerdo",   en: "Pig",      emoji: "🐷" },
+    { type: "animal", es: "Caballo", en: "Horse",    emoji: "🐴" },
+    { type: "animal", es: "Oveja",   en: "Sheep",    emoji: "🐑" },
+    { type: "veg",    es: "Tomate",  en: "Tomato",   emoji: "🍅" },
+    { type: "veg",    es: "Patata",  en: "Potato",   emoji: "🥔" }
+  ]},
+  { day: "Miércoles", emojiDay: "🐤", color: "#f1c40f", items: [
+    { type: "animal", es: "Conejo", en: "Rabbit", emoji: "🐰" },
+    { type: "animal", es: "Pájaro", en: "Bird",   emoji: "🐦" },
+    { type: "animal", es: "Pato",   en: "Duck",   emoji: "🦆" },
+    { type: "veg",    es: "Brócoli", en: "Broccoli", emoji: "🥦" },
+    { type: "veg",    es: "Pepino", en: "Cucumber", emoji: "🥒" }
+  ]},
+  { day: "Jueves",  emojiDay: "🌻", color: "#2ecc71", items: [
+    { type: "animal", es: "Abeja",  en: "Bee",  emoji: "🐝" },
+    { type: "animal", es: "León",   en: "Lion", emoji: "🦁" },
+    { type: "animal", es: "Mono",   en: "Monkey", emoji: "🐵" },
+    { type: "veg",    es: "Maíz",   en: "Corn", emoji: "🌽" },
+    { type: "veg",    es: "Cebolla", en: "Onion", emoji: "🧅" }
+  ]},
+  { day: "Viernes", emojiDay: "⭐", color: "#3498db", items: [
+    { type: "animal", es: "Elefante", en: "Elephant", emoji: "🐘" },
+    { type: "animal", es: "Rana",     en: "Frog",     emoji: "🐸" },
+    { type: "animal", es: "Pez",      en: "Fish",     emoji: "🐟" },
+    { type: "veg",    es: "Calabaza", en: "Pumpkin",  emoji: "🎃" },
+    { type: "veg",    es: "Champiñón", en: "Mushroom", emoji: "🍄" }
+  ]},
+  { day: "Sábado",  emojiDay: "🎈", color: "#9b59b6", items: [
+    { type: "animal", es: "Tigre", en: "Tiger", emoji: "🐯" },
+    { type: "animal", es: "Oso",   en: "Bear",  emoji: "🐻" },
+    { type: "animal", es: "Gallina", en: "Hen", emoji: "🐔" },
+    { type: "veg",    es: "Pimiento", en: "Pepper", emoji: "🫑" },
+    { type: "veg",    es: "Berenjena", en: "Eggplant", emoji: "🍆" }
+  ]},
+  { day: "Domingo", emojiDay: "☀️", color: "#e91e63", items: [
+    { type: "animal", es: "Jirafa", en: "Giraffe", emoji: "🦒" },
+    { type: "animal", es: "Tortuga", en: "Turtle", emoji: "🐢" },
+    { type: "animal", es: "Mariposa", en: "Butterfly", emoji: "🦋" },
+    { type: "veg",    es: "Guisantes", en: "Peas", emoji: "🫛" },
+    { type: "veg",    es: "Apio", en: "Celery", emoji: "🌿" }
+  ]}
+];
+
+let current = 0;
+
+function renderDays() {
+  const bar = document.getElementById("daysBar");
+  bar.innerHTML = "";
+  days.forEach((d, i) => {
+    const b = document.createElement("button");
+    b.className = "day-btn" + (i === current ? " active" : "");
+    b.style.background = d.color;
+    b.textContent = d.day;
+    b.onclick = () => { current = i; renderAll(); };
+    bar.appendChild(b);
+  });
+}
+
+function renderCards() {
+  const d = days[current];
+  document.getElementById("dayTitle").textContent =
+    `${d.emojiDay} ${d.day} - ${enDays[current]} ${d.emojiDay}`;
+
+  const box = document.getElementById("cards");
+  box.innerHTML = "";
+  d.items.forEach((item, i) => {
+    const card = document.createElement("div");
+    card.className = "card";
+    card.style.animationDelay = (i * 0.12) + "s";
+    card.innerHTML = `
+      <span class="type-badge ${item.type === 'animal' ? 'badge-animal' : 'badge-veg'}">
+        ${item.type === 'animal' ? '🐾 Animal' : '🌱 Verdura'}
+      </span>
+      <span class="emoji">${item.emoji}</span>
+      <div class="word-es">${item.es}</div>
+      <div class="word-en">${item.en}</div>
+      <div class="sound-hint">🔊 tocame</div>
+    `;
+    card.onclick = () => speak(item.en);
+    box.appendChild(card);
+  });
+}
+
+/* Construye la versión para imprimir (toda la semana) */
+function buildPrintSection() {
+  const ps = document.getElementById("printSection");
+  let html = `
+    <div class="print-cover">
+      <h1>🌟 ¡Aprende Inglés! 🌟</h1>
+      <p>Animales y Verduras 🐶🥕</p>
+      <p>De Lunes a Domingo 📅</p>
+      <p style="font-size:18px; color:#888;">Nombre: _______________________</p>
+    </div>`;
+  days.forEach((d, i) => {
+    html += `<div class="print-day">
+      <div class="print-day-title" style="background:${d.color}">${d.emojiDay} ${d.day} - ${enDays[i]} ${d.emojiDay}</div>
+      <div class="print-cards">`;
+    d.items.forEach(item => {
+      html += `
+        <div class="print-card">
+          <span class="emoji">${item.emoji}</span>
+          <div class="word-es">${item.es}</div>
+          <div class="word-en">${item.en}</div>
+        </div>`;
+    });
+    html += `</div></div>`;
+  });
+  ps.innerHTML = html;
+}
+
+function speak(word) {
+  if (!("speechSynthesis" in window)) return;
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(word);
+  u.lang = "en-US";
+  u.rate = 0.8;
+  u.pitch = 1.2;
+  speechSynthesis.speak(u);
+}
+
+function changeDay(dir) {
+  current = (current + dir + days.length) % days.length;
+  renderAll();
+}
+
+function renderAll() { renderDays(); renderCards(); }
+buildPrintSection();
+renderAll();
+</script>
+</body>
+</html>
